@@ -53,7 +53,7 @@ Example:
 import { Get } from '@nestjs/common';
 import { Controller } from '@nestjs/common';
 import { ResourceService } from './resource.service';
-import { MongoQuery, MongoQueryModel } from 'nest-query-parser';
+import { MongoQuery, MongoQueryModel } from 'nest-mongo-query-parser';
 
 @Controller('resources')
 export class ResourceController {
@@ -71,7 +71,7 @@ Example:
 
 ```ts
 import { Injectable } from '@nestjs/common';
-import { MongoQueryParser, MongoQueryModel } from 'nest-query-parser';
+import { MongoQueryParser, MongoQueryModel } from 'nest-mongo-query-parser';
 
 @Injectable()
 export class ResourceService {
@@ -634,7 +634,7 @@ proper queries for your API, to prevent implementation errors from being thrown 
 ## Practical Examples
 
 Check out how the configuration of the library in an API works in practice
-in [this project](https://www.github.com/lucasrochagit/nest-query-parser-apis).
+in [this project](https://www.github.com/lucasrochagit/nest-mongo-query-parser-apis).
 
 ## License
 
@@ -652,15 +652,15 @@ Distributed under the Apache License 2.0. See `LICENSE` for more information.
 [node.js]: https://nodejs.org
 [npm.js]: https://www.npmjs.com/
 [license-image]: https://img.shields.io/badge/license-Apache%202.0-blue.svg
-[license-url]: https://github.com/lucasrochagit/nest-query-parser/blob/main/LICENSE
-[npm-image]: https://img.shields.io/npm/v/nest-query-parser.svg?color=red&logo=npm
-[npm-url]: https://npmjs.org/package/nest-query-parser
-[npm-downloads-image]: https://img.shields.io/npm/dm/nest-query-parser.svg
-[npm-downloads-url]: https://npmjs.org/package/nest-query-parser
+[license-url]: https://github.com/lucasrochagit/nest-mongo-query-parser/blob/main/LICENSE
+[npm-image]: https://img.shields.io/npm/v/nest-mongo-query-parser.svg?color=red&logo=npm
+[npm-url]: https://npmjs.org/package/nest-mongo-query-parser
+[npm-downloads-image]: https://img.shields.io/npm/dm/nest-mongo-query-parser.svg
+[npm-downloads-url]: https://npmjs.org/package/nest-mongo-query-parser
 [dependencies-image]: https://shields.io/badge/dependencies-1-green
 [dependencies-url]: https://shields.io/badge/dependencies-0-green
-[releases-image]: https://img.shields.io/github/release-date/lucasrochagit/nest-query-parser.svg
-[releases-url]: https://github.com/lucasrochagit/nest-query-parser/releases
-[contributors-image]: https://img.shields.io/github/contributors/lucasrochagit/nest-query-parser.svg?color=green
-[contributors-url]: https://github.com/lucasrochagit/nest-query-parser/graphs/contributors
-[issues-image]: https://img.shields.io/github/issues/lucasrochagit/nest-query-parser.svg
+[releases-image]: https://img.shields.io/github/release-date/lucasrochagit/nest-mongo-query-parser.svg
+[releases-url]: https://github.com/lucasrochagit/nest-mongo-query-parser/releases
+[contributors-image]: https://img.shields.io/github/contributors/lucasrochagit/nest-mongo-query-parser.svg?color=green
+[contributors-url]: https://github.com/lucasrochagit/nest-mongo-query-parser/graphs/contributors
+[issues-image]: https://img.shields.io/github/issues/lucasrochagit/nest-mongo-query-parser.svg
