@@ -657,8 +657,8 @@ Distributed under the Apache License 2.0. See `LICENSE` for more information.
 [npm-url]: https://npmjs.org/package/nest-mongo-query-parser
 [npm-downloads-image]: https://img.shields.io/npm/dm/nest-mongo-query-parser.svg
 [npm-downloads-url]: https://npmjs.org/package/nest-mongo-query-parser
-[dependencies-image]: https://shields.io/badge/dependencies-1-green
-[dependencies-url]: https://shields.io/badge/dependencies-0-green
+[dependencies-image]: https://shields.io/badge/dependencies-2-green
+[dependencies-url]: https://shields.io/badge/dependencies-2-green
 [releases-image]: https://img.shields.io/github/release-date/lucasrochagit/nest-mongo-query-parser.svg
 [releases-url]: https://github.com/lucasrochagit/nest-mongo-query-parser/releases
 [contributors-image]: https://img.shields.io/github/contributors/lucasrochagit/nest-mongo-query-parser.svg?color=green
