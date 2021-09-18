@@ -1,0 +1,47 @@
+{
+  "name": "nest-mongo-query-parser",
+  "version": "1.0.0",
+  "description": "A MongoDB query string parser to be used in applications developed with NestJS.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.json",
+    "package": "npm run build && npm pack"
+  },
+  "files": [
+    "/dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucasrochagit/nest-mongo-query-parser.git"
+  },
+  "keywords": [
+    "nest",
+    "nestjs",
+    "query",
+    "querystring",
+    "parser"
+  ],
+  "author": "Lucas Cosmo Rocha",
+  "license": "Apache License 2.0",
+  "bugs": {
+    "url": "https://github.com/lucasrochagit/nest-mongo-query-parser/issues"
+  },
+  "homepage": "https://github.com/lucasrochagit/nest-mongo-query-parser#readme",
+  "dependencies": {
+    "@nestjs/common": "^8.0.6",
+    "url": "^0.11.0"
+  },
+  "devDependencies": {
+    "@types/node": "^16.7.10",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.3.0",
+    "typescript": "^4.3.5"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^8.0.6"
+  }
+}
