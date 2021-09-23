@@ -648,6 +648,10 @@ Distributed under the Apache License 2.0. See `LICENSE` for more information.
   [![LinkedIn](https://img.shields.io/static/v1?label=linkedin&message=@lucasrochacc&color=0A66C2)](https://www.linkedin.com/in/lucasrochacc/)
   [![Github](https://img.shields.io/static/v1?label=github&message=@lucasrochagit&color=black)](https://github.com/lucasrochagit/)
 
+- **Felipe Freitas** - _Maintainer_. </br></br>
+  [![LinkedIn](https://img.shields.io/static/v1?label=linkedin&message=@felipefreitas96&color=0A66C2)](https://www.linkedin.com/in/felipefreitas96/)
+  [![Github](https://img.shields.io/static/v1?label=github&message=@felipefreitas96&color=black)](https://github.com/felipefreitas96/)
+
 [//]: # 'These are reference links used in the body of this note.'
 [node.js]: https://nodejs.org
 [npm.js]: https://www.npmjs.com/
