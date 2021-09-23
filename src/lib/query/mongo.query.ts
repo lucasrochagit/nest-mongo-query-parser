@@ -246,12 +246,12 @@ function isElementFilter(filter: string): boolean {
 }
 
 function isSimpleFilter(value: string): boolean {
-  return StringUtils.testString(value, /^([\w\s@.\-:])*(?<! )$/);
+  return StringUtils.testString(value, /^([\w\s@.\-:]{1,}[\w@.\-:])$/);
 }
 
 function isORFilter(filter: string): boolean {
   if (filter.indexOf(',') === -1) return false;
-  return StringUtils.testString(filter, /^([\w\s@.\-:],?)*(?<!,)$/);
+  return StringUtils.testString(filter, /^(([\w\s@.-:],?){1,}[\w@.-:])$/);
 }
 
 function getElementExists(value: string) {
