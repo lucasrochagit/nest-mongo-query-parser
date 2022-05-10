@@ -119,7 +119,6 @@ function getFilter(query: any, def: QueryObjectModel): QueryObjectModel {
       const allSimpleFilters: string[] = queryValue.filter((item: string) =>
         isSimpleFilter(item)
       );
-
       const filterSimpleValues = getArrayValue(key, allSimpleFilters);
       if (filterSimpleValues.length) {
         obj.$and = [...(obj.$and || []), ...filterSimpleValues];
@@ -207,7 +206,7 @@ function getSimpleFilterValue(
     return filter === 'true';
   }
 
-  const value = StringUtils.cleanString(filter, /[^\w\s@.-:]/g);
+  const value = StringUtils.cleanString(filter, /[^\w\s@.-:\\]/g);
   let $regex = value;
 
   if (filter.indexOf('*') === -1) {
@@ -251,7 +250,7 @@ function isSimpleFilter(value: string): boolean {
 
 function isORFilter(filter: string): boolean {
   if (filter.indexOf(',') === -1) return false;
-  return StringUtils.testString(filter, /^(([\w\s@.-:],?){1,}[\w@.-:])$/);
+  return StringUtils.testString(filter, /^(([\S\s@.-:],?){1,}[\S@.-:])$/);
 }
 
 function getElementExists(value: string) {
