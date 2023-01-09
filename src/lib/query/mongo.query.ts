@@ -1,5 +1,5 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { MongoQueryModel, QueryObjectModel } from '../model/mongo.query.model';
+import { MongoQueryModel, QueryObjectModel } from '../model';
 import { StringUtils } from '../utils/string.util';
 import { StringValidator } from '../utils/string.validator';
 import * as url from 'url';
