@@ -1,10 +1,10 @@
 export class StringValidator {
   public static isInt(str: string): boolean {
-    return /^[\d]+$/.test(str);
+    return /^\d+$/.test(str);
   }
 
   public static isNumberString(str: string): boolean {
-    return /^[-]?[\d]*\.?[\d]*$/.test(str);
+    return /^-?\d*\.?\d*$/.test(str);
   }
 
   public static isISODate(str: string): boolean {
