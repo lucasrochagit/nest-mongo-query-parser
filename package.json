@@ -1,6 +1,6 @@
 {
   "name": "nest-mongo-query-parser",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "A MongoDB query string parser to be used in applications developed with NestJS.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -36,12 +36,12 @@
     "url": "^0.11.0"
   },
   "devDependencies": {
-    "@types/node": "^16.7.10",
+    "@types/node": "^18.11.19",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.3.0",
-    "typescript": "^4.3.5"
+    "rxjs": "^7.8.0",
+    "typescript": "^4.9.5"
   },
   "peerDependencies": {
-    "@nestjs/common": "^8.0.6"
+    "@nestjs/common": "^9.3.3"
   }
 }

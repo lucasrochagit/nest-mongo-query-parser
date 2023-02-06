@@ -25,6 +25,8 @@
       - [Element Filters](#element-filters)
       - [AND | OR Filters](#and--or-filters)
     - [Populate](#populate)
+  - [Others Resources](#others-resources)
+    - ### [Add query params in code](#add-query-params-in-code)
 - [Rules](#rules)
 - [Observations](#observations)
 - [Practical Examples](#practical-examples)
@@ -511,7 +513,7 @@ To use the OR operator, you must enter the values separated by a comma. Example:
   "filter": {
     "$or": [
       {
-        "age":  30
+        "age": 30
       },
       {
         "age": 50
@@ -614,6 +616,109 @@ There are some rules to consider in populate. The populate must be specified as 
 3. If you want to filter the populated parameters, you need to specify the parameters that should be returned. If you
    want to return all object parameters, the `select` parameter must be informed as `all`.
    Example: `populate=jobs;all;salary=gt:3000`
+
+## Others Resources
+
+### Add query params in code
+
+Sometimes, we need to add some parameters to the ordering, selection, filters and even population objects in the query
+in the code, for some cases that we need to inform some query params that weren't informed by the client. For that, 
+this new feature has been added.
+
+To use it, it's simple: just call the method corresponding to the resource you want to add. The methods signatures are:
+
+```ts
+interface MongoQueryModel {
+    addSort(sort: QueryObjectModel): void
+
+    addSelect(select: QueryObjectModel): void
+
+    addFilter(filter: QueryObjectModel): void
+
+    addPopulate(populate: QueryObjectModel | QueryObjectModel[]): void
+}
+```
+
+An example of use: let's assume that we have the following MongoQueryModel object, and that it is assigned to a variable
+called "object".
+
+```ts
+const object: MongoQueryModel = {
+    filter: {age: {$gte: 30}},
+    sort: {created_at: -1},
+    select: {name: 1, age: 1},
+    populate: {path: 'job'}
+}
+```
+
+- To add a new filter, just call the `addFilter()` method. Then, we have:
+
+`object.addFilter({ "name": { "$regex": "Smith", "$options": "i" }})`
+
+- To add a new sorting parameter, just call the object's `addSort()` method. Then, we have:
+
+`object.addSort({ age: 1 })`
+
+- To add a new selection parameter, just call the object's `addSelect()` method. Then, we have:
+
+`object.addSelect({ gender: 1})`
+
+- To add a new population parameter, just call the object's `addPopulate()` method. Then, we have:
+
+`object.addPopulate({ path: address })`
+
+So the final object variable would become:
+
+```ts
+const model: MongoQueryModel = {
+    filter: {age: {$gte: 30}, name: {$regex: 'Smith', $options: "i"}},
+    sort: {created_at: -1, age: 1},
+    select: {name: 1, age: 1, gender: 1},
+    populate: [{path: 'job'}, {path: 'address'}],
+}
+```
+
+**Rules**:
+
+1. Priority will be given to fields that are added using the methods of the MongoQueryModel object. Therefore, if you
+   add a new parameter whose key already exists in the filter, it will be replaced by the new value to be added.
+   So if you have the filter `{ age: {$gte: 30 }, name: { $regex: 'Smith', $options: 'i' } }` and add the
+   filter `{age: 10}`, the final result of the filter will be `{ age: 10, name: { $regex: 'Smith', $options: 'i' } }`
+
+   This rule is valid for all query parameters with type ObjectQueryModel.
+
+2. For the populate property, we have a few more rules:
+    * For cases where the current populate is an array:
+        * If populate param to be informed in the `addPopulate()` method is an array, both arrays will be merged. So if
+          you
+          have populate param as `[{ path: 'job' }, { path: 'address'}]` and call the method with the
+          parameter `[{ path: 'school_address' }, { path: 'job_address' }]`, the final result will
+          be `[{ path: 'job' }, { path: 'address'},{ path: 'school_address' }, { path: 'job_address' }}]`. 
+        * If populate informed in the `addPopulate()` method is an object, it will be transformed into an array, and the
+          current value will be added to the new values. So if you have the populate param
+          as `[{ path: job }, { path: address}]` and call the method
+          with the
+          parameter `[{ path: job_address }]`, the final result will
+          be `[{ path: job },{ path: address }, { path : job_address }}]`
+   * For cases where the current populate is an object:
+
+     * If the populate param to be informed in the `addPopulate()` method is an array, the current value will be added to the
+       new
+       values. So if you have the populate `{ path: job }` and call the method with the
+       parameter `[{ path: school_address }, { path: job_address }]`, the final result will
+       be `[{ path: school_address }, { path : job_address }}, { path: job }]`
+
+     * If the populate informed in the `addPopulate()` method is an object, the main rule will be checked and, if they
+       differ,
+       an array will be formed with both current and new populate values. So if you have the populate `{ path: job }`
+       and call the method with the parameter `{ path: 'address'}`, the
+       final result
+       will be `[{ path: job }, { path: address}}]`. And if you have the populate `{ path: job }` and call the method
+       with the
+       parameter `{ path: 'job', select: 'all'}`, the final result
+       will
+       be `{ path: 'job', select: 'all'}`
+   * For all populate array cases (defined in code or coming from client), duplicated paths will not be verified.
 
 ## Rules
 
