@@ -207,7 +207,7 @@ function getSimpleFilterValue(
     return filter === 'true';
   }
 
-  const value = StringUtils.cleanString(filter, /[^\w\s@.-:]/g);
+  const value = StringUtils.cleanString(filter, /[^\w\s@.-:\u0600-\u06FF]/g);
   let $regex = value;
 
   if (filter.indexOf('*') === -1) {
