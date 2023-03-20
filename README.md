@@ -728,7 +728,8 @@ const model: MongoQueryModel = {
 - For populate, you should use `populate`only;
 - Anything other than `limit`, `skip`, `page`, `sort`, `select` and `populate` will be considered a filter;
 - Parameters never contain characters that don't fit the regex `/[^A-z0-9_.]/g`;
-- Filter values never contain characters that don't fit the regex `/[^\w\s@.-:]/g`;
+- Filter values never contain characters that don't fit the regex `/[^\w\s@.-:\u0600-\u06FF]/g`;
+  - `\u0600-\u06FF` contains arabic characters
 
 ## Observations
 
