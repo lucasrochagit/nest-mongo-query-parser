@@ -26,7 +26,7 @@
       - [AND | OR Filters](#and--or-filters)
     - [Populate](#populate)
   - [Others Resources](#others-resources)
-    - ### [Add query params in code](#add-query-params-in-code)
+    - [Add query params in code](#add-query-params-in-code)
 - [Rules](#rules)
 - [Observations](#observations)
 - [Practical Examples](#practical-examples)
@@ -740,7 +740,7 @@ proper queries for your API, to prevent implementation errors from being thrown 
 ## Practical Examples
 
 Check out how the configuration of the library in an API works in practice
-in [this project](https://www.github.com/lucasrochagit/nest-mongo-query-parser-apis).
+in [this project](https://github.com/lucasrochagit/template-nestjs-with-mongodb).
 
 ## License
 
