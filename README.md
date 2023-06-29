@@ -7,6 +7,8 @@
 [![Contributors][contributors-image]][contributors-url]
 [![NPM Downloads][npm-downloads-image]][npm-downloads-url]
 
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/lucasrochacc)
+
 ## Summary
 
 - [Prerequisites](#prerequisites)

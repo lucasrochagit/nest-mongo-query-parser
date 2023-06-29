@@ -1,6 +1,6 @@
 {
   "name": "nest-mongo-query-parser",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "A MongoDB query string parser to be used in applications developed with NestJS.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
