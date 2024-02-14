@@ -21,7 +21,7 @@ export const MongoQueryParser = (): MethodDecorator => {
   };
 };
 
-export const MongoQuery: (data: MongoQueryOptions) => ParameterDecorator =
+export const MongoQuery: (data?: MongoQueryOptions) => ParameterDecorator =
     createParamDecorator(
         (data: MongoQueryOptions, ctx: ExecutionContext): MongoQueryModel => {
           const query = ctx.getArgByIndex(0).query;
