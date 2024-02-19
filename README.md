@@ -16,23 +16,23 @@
 - [Usage](#usage)
 - [Examples](#examples)
 - [Explain the Resources](#explain-the-resources)
-  - [Queries with @MongoQuery() | @MongoQueryParser()](#queries-with-mongoquery--mongoqueryparser)
-    - [Pagination](#pagination)
-    - [Ordering](#ordering)
-    - [Select](#select)
-    - [Filters](#filters)
-      - [Simple Filters](#simple-filters)
-      - [Partial Filters](#partial-filters)
-      - [Comparison Filters](#comparison-filters)
-      - [Element Filters](#element-filters)
-      - [AND | OR Filters](#and--or-filters)
-    - [Populate](#populate)
-  - [Others Resources](#others-resources)
-    - [Add query params in code](#add-query-params-in-code)
+    - [Queries with @MongoQuery() | @MongoQueryParser()](#queries-with-mongoquery--mongoqueryparser)
+        - [Pagination](#pagination)
+        - [Ordering](#ordering)
+        - [Select](#select)
+        - [Filters](#filters)
+            - [Simple Filters](#simple-filters)
+            - [Partial Filters](#partial-filters)
+            - [Comparison Filters](#comparison-filters)
+            - [Element Filters](#element-filters)
+            - [AND | OR Filters](#and--or-filters)
+        - [Populate](#populate)
+        - [Search Filters](#search-filters)
+    - [Others Resources](#others-resources)
+        - [Add query params in code](#add-query-params-in-code)
 - [Rules](#rules)
 - [Observations](#observations)
 - [Practical Examples](#practical-examples)
-- [Upcoming Features](#upcoming-features)
 - [License](#license)
 - [Authors](#authors)
 
@@ -54,19 +54,20 @@ If you want to use it as a ParamDecorator, just add the tag referring to the Par
 Example:
 
 ```ts
-import { Get } from '@nestjs/common';
-import { Controller } from '@nestjs/common';
-import { ResourceService } from './resource.service';
-import { MongoQuery, MongoQueryModel } from 'nest-mongo-query-parser';
+import {Get} from '@nestjs/common';
+import {Controller} from '@nestjs/common';
+import {ResourceService} from './resource.service';
+import {MongoQuery, MongoQueryModel} from 'nest-mongo-query-parser';
 
 @Controller('resources')
 export class ResourceController {
-  constructor(private readonly _service: ResourceService) {}
+    constructor(private readonly _service: ResourceService) {
+    }
 
-  @Get()
-  public find(@MongoQuery() query: MongoQueryModel) {
-    return this._service.find(query);
-  }
+    @Get()
+    public find(@MongoQuery() query: MongoQueryModel) {
+        return this._service.find(query);
+    }
 }
 ```
 
@@ -74,19 +75,20 @@ It can also be used as a MethodDecorator. Just use the tag referring to the Pars
 Example:
 
 ```ts
-import { Injectable } from '@nestjs/common';
-import { MongoQueryParser, MongoQueryModel } from 'nest-mongo-query-parser';
+import {Injectable} from '@nestjs/common';
+import {MongoQueryParser, MongoQueryModel} from 'nest-mongo-query-parser';
 
 @Injectable()
 export class ResourceService {
-  @MongoQueryParser()
-  public find(query: MongoQueryModel) {
-    return [];
-  }
+    @MongoQueryParser()
+    public find(query: MongoQueryModel) {
+        return [];
+    }
 }
 ```
 
-NOTE: When using the library as a MethodDecorator, you can receive other arguments in the method in question, but the query has to be passed as the first argument of the function, so that the treatment is done properly.
+NOTE: When using the library as a MethodDecorator, you can receive other arguments in the method in question, but the
+query has to be passed as the first argument of the function, so that the treatment is done properly.
 
 ## Examples
 
@@ -607,6 +609,7 @@ There are three ways to add the `populate` parameter to the query string:
   ]
 }
 ```
+
 There are some rules to consider in populate. The populate must be specified as follows:
 `populate=field;select;filter`. Soon:
 
@@ -619,18 +622,30 @@ There are some rules to consider in populate. The populate must be specified as 
    Example: `populate=jobs;all;salary=gt:3000`
 
 ### Search Filters
-Optionally you can override default search filter behavior by passing some specific options to `MongoQuery()` decorator. This will be used to search in all specified fields of the document.
+
+Optionally you can override default search filter behavior by passing some specific options with the `MongoQuery()`
+decorator. This will be used to search in all specified fields of the document.
 
 ```ts
-@Get()
-findAll(
-  @MongoQuery({
-    search: { key: 'q', paths: ['name', 'description'] },
-  }) query: MongoQueryModel,
-) {
-  return this.myservice.findAll(query);
+import {Get} from '@nestjs/common';
+import {Controller} from '@nestjs/common';
+import {ResourceService} from './resource.service';
+import {MongoQuery, MongoQueryModel} from 'nest-mongo-query-parser';
+
+@Controller('resources')
+export class ResourceController {
+    constructor(private readonly _service: ResourceService) {
+    }
+
+    @Get()
+    public find(@MongoQuery({
+        search: {key: 'q', paths: ['name', 'description']},
+    }) query: MongoQueryModel) {
+        return this._service.find(query);
+    }
 }
 ```
+
 #### Request: http://localhost:3000/resources?q=John
 
 #### Query:
@@ -666,7 +681,7 @@ findAll(
 ### Add query params in code
 
 Sometimes, we need to add some parameters to the ordering, selection, filters and even population objects in the query
-in the code, for some cases that we need to inform some query params that weren't informed by the client. For that, 
+in the code, for some cases that we need to inform some query params that weren't informed by the client. For that,
 this new feature has been added.
 
 To use it, it's simple: just call the method corresponding to the resource you want to add. The methods signatures are:
@@ -737,32 +752,34 @@ const model: MongoQueryModel = {
           you
           have populate param as `[{ path: 'job' }, { path: 'address'}]` and call the method with the
           parameter `[{ path: 'school_address' }, { path: 'job_address' }]`, the final result will
-          be `[{ path: 'job' }, { path: 'address'},{ path: 'school_address' }, { path: 'job_address' }}]`. 
+          be `[{ path: 'job' }, { path: 'address'},{ path: 'school_address' }, { path: 'job_address' }}]`.
         * If populate informed in the `addPopulate()` method is an object, it will be transformed into an array, and the
           current value will be added to the new values. So if you have the populate param
           as `[{ path: job }, { path: address}]` and call the method
           with the
           parameter `[{ path: job_address }]`, the final result will
           be `[{ path: job },{ path: address }, { path : job_address }}]`
-   * For cases where the current populate is an object:
+    * For cases where the current populate is an object:
 
-     * If the populate param to be informed in the `addPopulate()` method is an array, the current value will be added to the
-       new
-       values. So if you have the populate `{ path: job }` and call the method with the
-       parameter `[{ path: school_address }, { path: job_address }]`, the final result will
-       be `[{ path: school_address }, { path : job_address }}, { path: job }]`
+        * If the populate param to be informed in the `addPopulate()` method is an array, the current value will be
+          added to the
+          new
+          values. So if you have the populate `{ path: job }` and call the method with the
+          parameter `[{ path: school_address }, { path: job_address }]`, the final result will
+          be `[{ path: school_address }, { path : job_address }}, { path: job }]`
 
-     * If the populate informed in the `addPopulate()` method is an object, the main rule will be checked and, if they
-       differ,
-       an array will be formed with both current and new populate values. So if you have the populate `{ path: job }`
-       and call the method with the parameter `{ path: 'address'}`, the
-       final result
-       will be `[{ path: job }, { path: address}}]`. And if you have the populate `{ path: job }` and call the method
-       with the
-       parameter `{ path: 'job', select: 'all'}`, the final result
-       will
-       be `{ path: 'job', select: 'all'}`
-   * For all populate array cases (defined in code or coming from client), duplicated paths will not be verified.
+        * If the populate informed in the `addPopulate()` method is an object, the main rule will be checked and, if
+          they
+          differ,
+          an array will be formed with both current and new populate values. So if you have the populate `{ path: job }`
+          and call the method with the parameter `{ path: 'address'}`, the
+          final result
+          will be `[{ path: job }, { path: address}}]`. And if you have the populate `{ path: job }` and call the method
+          with the
+          parameter `{ path: 'job', select: 'all'}`, the final result
+          will
+          be `{ path: 'job', select: 'all'}`
+    * For all populate array cases (defined in code or coming from client), duplicated paths will not be verified.
 
 ## Rules
 
@@ -773,7 +790,7 @@ const model: MongoQueryModel = {
 - Anything other than `limit`, `skip`, `page`, `sort`, `select` and `populate` will be considered a filter;
 - Parameters never contain characters that don't fit the regex `/[^A-z0-9_.]/g`;
 - Filter values never contain characters that don't fit the regex `/[^\w\s@.-:\u0600-\u06FF]/g`;
-  - `\u0600-\u06FF` contains arabic characters
+    - `\u0600-\u06FF` contains arabic characters
 
 ## Observations
 
@@ -803,18 +820,33 @@ Distributed under the Apache License 2.0. See `LICENSE` for more information.
   [![Github](https://img.shields.io/static/v1?label=github&message=@felipefreitas96&color=black)](https://github.com/felipefreitas96/)
 
 [//]: # 'These are reference links used in the body of this note.'
+
 [node.js]: https://nodejs.org
+
 [npm.js]: https://www.npmjs.com/
+
 [license-image]: https://img.shields.io/badge/license-Apache%202.0-blue.svg
+
 [license-url]: https://github.com/lucasrochagit/nest-mongo-query-parser/blob/main/LICENSE
+
 [npm-image]: https://img.shields.io/npm/v/nest-mongo-query-parser.svg?color=red&logo=npm
+
 [npm-url]: https://npmjs.org/package/nest-mongo-query-parser
+
 [npm-downloads-image]: https://img.shields.io/npm/dm/nest-mongo-query-parser.svg
+
 [npm-downloads-url]: https://npmjs.org/package/nest-mongo-query-parser
+
 [dependencies-image]: https://shields.io/badge/dependencies-2-green
+
 [dependencies-url]: https://shields.io/badge/dependencies-2-green
+
 [releases-image]: https://img.shields.io/github/release-date/lucasrochagit/nest-mongo-query-parser.svg
+
 [releases-url]: https://github.com/lucasrochagit/nest-mongo-query-parser/releases
+
 [contributors-image]: https://img.shields.io/github/contributors/lucasrochagit/nest-mongo-query-parser.svg?color=green
+
 [contributors-url]: https://github.com/lucasrochagit/nest-mongo-query-parser/graphs/contributors
+
 [issues-image]: https://img.shields.io/github/issues/lucasrochagit/nest-mongo-query-parser.svg

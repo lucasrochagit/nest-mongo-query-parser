@@ -1,12 +1,9 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { MongoQueryModel, QueryObjectModel } from '../model';
+import { MongoQueryOptions } from '../interface/mongo.query.options';
 import { StringUtils } from '../utils/string.util';
 import { StringValidator } from '../utils/string.validator';
 import * as url from 'url';
-
-export interface MongoQueryOptions {
-  search?: { key: string; paths: string[] };
-}
 
 export const MongoQueryParser = (): MethodDecorator => {
   return (_target, _key, descriptor: TypedPropertyDescriptor<any>) => {
@@ -21,15 +18,15 @@ export const MongoQueryParser = (): MethodDecorator => {
   };
 };
 
-export const MongoQuery: (data?: MongoQueryOptions) => ParameterDecorator =
+export const MongoQuery: (opts?: MongoQueryOptions | undefined) => ParameterDecorator =
     createParamDecorator(
-        (data: MongoQueryOptions, ctx: ExecutionContext): MongoQueryModel => {
+        (opts: MongoQueryOptions | undefined, ctx: ExecutionContext): MongoQueryModel => {
           const query = ctx.getArgByIndex(0).query;
-          return parse(query, data);
+          return parse(query, opts);
         },
     );
 
-function parse(query: any, data?: MongoQueryOptions): MongoQueryModel {
+function parse(query: any, opts?: MongoQueryOptions): MongoQueryModel {
   const def_limit = 100;
   const def_skip = 0;
   const def_page = 1;
@@ -43,12 +40,13 @@ function parse(query: any, data?: MongoQueryOptions): MongoQueryModel {
   result.select = getSelect(query, {});
   result.sort = getSort(query, {});
   result.populate = getPopulate(query, []);
-  result.filter = data?.search
-      ? getSearch(query, data.search)
+  result.filter = opts?.search
+      ? getSearch(query, opts.search)
       : getFilter(query, {});
 
   return result;
 }
+
 function getSearch(
     query: any,
     data: { key: string; paths: string[] },
@@ -65,6 +63,7 @@ function getSearch(
     return getFilter(query, {})
   }
 }
+
 function getIntKey(query: any, key: string, def: number): number {
   if (!query[key] || !StringValidator.isInt(query[key])) {
     return def;
