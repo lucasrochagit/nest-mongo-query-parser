@@ -4,6 +4,10 @@ import { StringUtils } from '../utils/string.util';
 import { StringValidator } from '../utils/string.validator';
 import * as url from 'url';
 
+export interface MongoQueryOptions {
+  search?: { key: string; paths: string[] };
+}
+
 export const MongoQueryParser = (): MethodDecorator => {
   return (_target, _key, descriptor: TypedPropertyDescriptor<any>) => {
     const original = descriptor.value;
@@ -17,14 +21,15 @@ export const MongoQueryParser = (): MethodDecorator => {
   };
 };
 
-export const MongoQuery: () => ParameterDecorator = createParamDecorator(
-  (_data: unknown, ctx: ExecutionContext): MongoQueryModel => {
-    const query = ctx.getArgByIndex(0).query;
-    return parse(query);
-  }
-);
+export const MongoQuery: (data?: MongoQueryOptions) => ParameterDecorator =
+    createParamDecorator(
+        (data: MongoQueryOptions, ctx: ExecutionContext): MongoQueryModel => {
+          const query = ctx.getArgByIndex(0).query;
+          return parse(query, data);
+        },
+    );
 
-function parse(query: any): MongoQueryModel {
+function parse(query: any, data?: MongoQueryOptions): MongoQueryModel {
   const def_limit = 100;
   const def_skip = 0;
   const def_page = 1;
@@ -38,11 +43,28 @@ function parse(query: any): MongoQueryModel {
   result.select = getSelect(query, {});
   result.sort = getSort(query, {});
   result.populate = getPopulate(query, []);
-  result.filter = getFilter(query, {});
+  result.filter = data?.search
+      ? getSearch(query, data.search)
+      : getFilter(query, {});
 
   return result;
 }
-
+function getSearch(
+    query: any,
+    data: { key: string; paths: string[] },
+): QueryObjectModel {
+  const key = data.key;
+  const paths = data.paths;
+  if (query[key]) {
+    const search = query[key];
+    const filter = paths.map((path) => ({
+      [path]: { $regex: search, $options: 'i' },
+    }));
+    return { $or: filter };
+  } else {
+    return getFilter(query, {})
+  }
+}
 function getIntKey(query: any, key: string, def: number): number {
   if (!query[key] || !StringValidator.isInt(query[key])) {
     return def;

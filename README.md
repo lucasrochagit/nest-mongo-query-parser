@@ -607,7 +607,6 @@ There are three ways to add the `populate` parameter to the query string:
   ]
 }
 ```
-
 There are some rules to consider in populate. The populate must be specified as follows:
 `populate=field;select;filter`. Soon:
 
@@ -618,6 +617,49 @@ There are some rules to consider in populate. The populate must be specified as 
 3. If you want to filter the populated parameters, you need to specify the parameters that should be returned. If you
    want to return all object parameters, the `select` parameter must be informed as `all`.
    Example: `populate=jobs;all;salary=gt:3000`
+
+### Search Filters
+Optionally you can override default search filter behavior by passing some specific options to `MongoQuery()` decorator. This will be used to search in all specified fields of the document.
+
+```ts
+@Get()
+findAll(
+  @MongoQuery({
+    search: { key: 'q', paths: ['name', 'description'] },
+  }) query: MongoQueryModel,
+) {
+  return this.myservice.findAll(query);
+}
+```
+#### Request: http://localhost:3000/resources?q=John
+
+#### Query:
+
+```json
+{
+  "limit": 30,
+  "skip": 0,
+  "select": {},
+  "sort": {},
+  "populate": [],
+  "filter": {
+    "$or": [
+      {
+        "name": {
+          "$regex": "John",
+          "$options": "i"
+        }
+      },
+      {
+        "description": {
+          "$regex": "John",
+          "$options": "i"
+        }
+      }
+    ]
+  }
+}
+```
 
 ## Others Resources
 
